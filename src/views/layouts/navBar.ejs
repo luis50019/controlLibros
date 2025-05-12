@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar Mejorado</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c3e50;
+            color: white;
+            width: 100%;
+            height: 5rem;
+            padding: 0 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-logo:hover {
+            color: #ecf0f1;
+        }
+
+        .navbar-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar-links li {
+            margin-left: 1.5rem;
+            position: relative;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            display: block;
+        }
+
+        .navbar-links a:hover {
+            color: #3498db;
+        }
+
+        /* Efecto subrayado al pasar el mouse */
+        .navbar-links li::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #3498db;
+            transition: width 0.3s ease;
+        }
+
+        .navbar-links li:hover::after {
+            width: 100%;
+        }
+
+        /* Menú hamburguesa (para móviles) */
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .navbar-toggle span {
+            height: 3px;
+            width: 25px;
+            background-color: white;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        /* Estilos para móviles */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 1rem;
+                height: 4rem;
+            }
+            
+            .navbar-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: #2c3e50;
+                position: absolute;
+                top: 4rem;
+                left: 0;
+                padding: 1rem 0;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .navbar-links.active {
+                display: flex;
+            }
+
+            .navbar-links li {
+                margin: 0;
+                text-align: center;
+                padding: 0.8rem 0;
+            }
+
+            .navbar-links li::after {
+                display: none;
+            }
+
+            .navbar-links a {
+                padding: 0.5rem 1rem;
+            }
+
+            .navbar-toggle {
+                display: flex;
+            }
+
+            /* Animación del menú hamburguesa */
+            .navbar-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .navbar-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .navbar-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <!-- Logo -->
+        <a href="#" class="navbar-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            LibroTrack
+        </a>
+
+        <ul class="navbar-links" id="navbar-links">
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/book">Libros</a></li>
+            <li><a href="/about">Acerca de</a></li>
+            <li><a href="/contact">Contacto</a></li>
+        </ul>
+        <button class="navbar-toggle" id="navbar-toggle" aria-label="Menú de navegación">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggle = document.getElementById('navbar-toggle');
+            const navbarLinks = document.getElementById('navbar-links');
+
+            navbarToggle.addEventListener('click', function() {
+                navbarLinks.classList.toggle('active');
+                navbarToggle.classList.toggle('active');
+                
+                if (window.innerWidth <= 768) {
+                    const navItems = navbarLinks.querySelectorAll('a');
+                    navItems.forEach(item => {
+                        item.addEventListener('click', () => {
+                            navbarLinks.classList.remove('active');
+                            navbarToggle.classList.remove('active');
+                        });
+                    });
+                }
+            });
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    navbarLinks.classList.remove('active');
+                    navbarToggle.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
