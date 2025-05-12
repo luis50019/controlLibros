@@ -12,7 +12,7 @@ const searchInput = document.getElementById("search");
 const year = document.getElementById("year-from");
 
 // URL base de tu API
-const API_URL = "http://localhost:4040/api/book"; // Ajusta según tu configuración
+const API_URL = "https://controllibros.onrender.com"; // Ajusta según tu configuración
 
 // Mostrar estado de carga
 function showLoading(show) {
