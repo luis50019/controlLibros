@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import morgan from "morgan";
 import RouterView from "./routes/viewBook.router.js";
 import RouterBook from "./routes/book.routes.js";
+import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +17,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("layout", "layouts/layout");
 
 
+app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(expressLayouts);
 app.use(json());
