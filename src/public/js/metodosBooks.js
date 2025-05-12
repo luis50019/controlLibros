@@ -9,7 +9,9 @@ const loadingElement = document.getElementById("loading");
 const buttonSerch = document.getElementById("btn-search");
 // Filtros
 const searchInput = document.getElementById("search");
-const year = document.getElementById("year-from");
+const inputYear = document.getElementById("search-year");
+const inputId = document.getElementById("search-id");
+const inputEdition = document.getElementById("search-edition");
 
 // URL base de tu API
 const API_URL = "https://controllibros.onrender.com/api/book/"; // Ajusta según tu configuración
@@ -19,7 +21,12 @@ function showLoading(show) {
   loadingElement.style.display = show ? "block" : "none";
   booksContainer.style.display = show ? "none" : "grid";
 }
-
+document.getElementById("btn-allbooks").addEventListener('click',async()=>{
+  inputYear.value ="";
+  inputEdition.value = "";
+  inputId.value = "";
+  renderBooks()
+});
 // Mostrar libros en la página
 async function renderBooks() {
   showLoading(true);
@@ -104,7 +111,7 @@ document.getElementById("btn-search-id").addEventListener("click", async () => {
 
   try {
     showLoading(true);
-    const res = await fetch(`${API_URL}/${id}`);
+    const res = await fetch(`${API_URL}${id}`);
     if (!res.ok) throw new Error("Libro no encontrado");
     const book = await res.json();
 
@@ -125,13 +132,22 @@ document
 
     try {
       showLoading(true);
-      const res = await fetch(`${API_URL}/year/${year}`);
+      const res = await fetch(`${API_URL}year/${year}`);
+      console.log(res )
       const books = await res.json();
-
+      console.log(books)
       booksContainer.innerHTML = "";
-      books.forEach(renderSingleBook);
+      if(res.status == 404) {
+        booksContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #e74c3c;">
+                        No se encontraron libros en el año ${year}.
+                    </div>`
+      }else{
+        books.forEach(renderSingleBook);
+      }
     } catch (error) {
-      booksContainer.innerHTML = `<p style="color:red;">${error.message}</p>`;
+      console.log(error)
+      booksContainer.innerHTML = `<p style="color:red;">${error}</p>`;
     } finally {
       showLoading(false);
     }
@@ -145,11 +161,17 @@ document
 
     try {
       showLoading(true);
-      const res = await fetch(`${API_URL}/edition/${edition}`);
+      const res = await fetch(`${API_URL}edition/${edition}`);
       const books = await res.json();
-
       booksContainer.innerHTML = "";
-      books.forEach(renderSingleBook);
+      if (res.status == 404) {
+        booksContainer.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #e74c3c;">
+                        No se encontraron libros de la edicion ${edition}.
+                    </div>`;
+      } else {
+        books.forEach(renderSingleBook);
+      }
     } catch (error) {
       booksContainer.innerHTML = `<p style="color:red;">${error.message}</p>`;
     } finally {
@@ -196,7 +218,7 @@ function openAddBookModal() {
 async function editBook(bookId) {
   try {
     showLoading(true);
-    const response = await fetch(`${API_URL}/info/${bookId}`);
+    const response = await fetch(`${API_URL}info/${bookId}`);
 
     if (!response.ok) {
       throw new Error("Libro no encontrado");
@@ -226,7 +248,7 @@ async function editBook(bookId) {
 async function deleteBook(bookId) {
   try {
     showLoading(true);
-    const response = await fetch(`${API_URL}/${bookId}`, {
+    const response = await fetch(`${API_URL}${bookId}`, {
       method: "DELETE",
     });
 
@@ -271,7 +293,7 @@ async function saveBook(event) {
 
     if (bookId) {
       // Actualizar libro existente
-      response = await fetch(`${API_URL}/${bookId}`, {
+      response = await fetch(`${API_URL}${bookId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

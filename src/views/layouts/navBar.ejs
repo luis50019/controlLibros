@@ -182,35 +182,7 @@
             <span></span>
             <span></span>
         </button>
-    </nav>
-
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const navbarToggle = document.getElementById('navbar-toggle');
-            const navbarLinks = document.getElementById('navbar-links');
-
-            navbarToggle.addEventListener('click', function() {
-                navbarLinks.classList.toggle('active');
-                navbarToggle.classList.toggle('active');
-                
-                if (window.innerWidth <= 768) {
-                    const navItems = navbarLinks.querySelectorAll('a');
-                    navItems.forEach(item => {
-                        item.addEventListener('click', () => {
-                            navbarLinks.classList.remove('active');
-                            navbarToggle.classList.remove('active');
-                        });
-                    });
-                }
-            });
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    navbarLinks.classList.remove('active');
-                    navbarToggle.classList.remove('active');
-                }
-            });
-        });
-    </script>
+    </nav>        
+      
 </body>
 </html>
